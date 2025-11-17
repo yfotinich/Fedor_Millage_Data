@@ -1,19 +1,27 @@
 import pandas as pd
 import os
-
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 import psycopg2
 
-# Set path for reading the CSV files
-csv_path = "../Millage_Data/"
+# Load environment variables from .env file
+load_dotenv()
 
+# Set path for reading the CSV files
+csv_path = os.getenv("CSV_PATH", "../Millage_Data/")
 
 # Set variables for PostgreSQL connection
 # Database connection parameters
-DB_HOST = "157.245.7.53"
-DB_NAME = "rivka"
-DB_USER = "postgres"
-DB_PASSWORD = "4pZK_bx_TV"
+DB_HOST = os.getenv("DB_HOST")
+DB_NAME = os.getenv("DB_NAME")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+
+# Validate required environment variables
+required_vars = ["DB_HOST", "DB_NAME", "DB_USER", "DB_PASSWORD"]
+missing_vars = [var for var in required_vars if not os.getenv(var)]
+if missing_vars:
+    raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
 
 # Using SQLAlchemy (easier for pandas)
 # Create connection string
