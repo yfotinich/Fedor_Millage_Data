@@ -4,106 +4,30 @@ import os
 from sqlalchemy import create_engine
 import psycopg2
 
-# # Reading the CSV files
-# # Georgia Millage Rates CSV file path
-# file_name = "GA_MILLAGE_RATES.csv"
+# Set path for reading the CSV files
 csv_path = "../Millage_Data/"
-# file_path = os.path.join(csv_path, file_name)
-
-# df_ga = pd.read_csv(file_path)
-
-# print("Data loaded successfully!")
-# print(f"Shape: {df_ga.shape}")
-# print("\nFirst few rows:")
-# print(df_ga.head())#(1643, 9)
-
-# # Ohio Millage Rates CSV file path
-# file_name = "OH_MILLAGE_RATES.csv"
-# csv_path = "../Millage_Data/"
-# file_path = os.path.join(csv_path, file_name)
-
-# df_oh = pd.read_csv(file_path)
-# print("Data loaded successfully!")
-# print(f"Shape: {df_oh.shape}")
-# print("\nFirst few rows:")
-# print(df_oh.head())#(4473, 16)
-
-# # Ohio Millage Rates CSV file path
-# file_name = "TX_MILLAGE_RATES.csv"
-# csv_path = "../Millage_Data/"
-# file_path = os.path.join(csv_path, file_name)
-
-# df_tx = pd.read_csv(file_path)
-# print("Data loaded successfully!")
-# print(f"Shape: {df_tx.shape}")# (5575, 10)
-# print("\nFirst few rows:")
-# print(df_tx.head())
 
 
-
-
+# Set variables for PostgreSQL connection
 # Database connection parameters
 DB_HOST = "[REDACTED_DB_HOST]"
 DB_NAME = "rivka"
 DB_USER = "postgres"
 DB_PASSWORD = "[REDACTED_DB_PASSWORD]"
 
-# Method 1: Using SQLAlchemy (Recommended - easier for pandas)
+# Using SQLAlchemy (easier for pandas)
 # Create connection string
 connection_string = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:5432/{DB_NAME}"
 
 # Create engine
 engine = create_engine(connection_string)
 
-# # Write dataframe to PostgreSQL
-# try:
-#     # Write to table
-#     df_tx.to_sql(
-#         'eugene_test_texas_millage',      # Table name
-#         engine,                  # Database engine
-#         if_exists='replace',     # Options: 'fail', 'replace', 'append'
-#         index=False,             # Don't write dataframe index as column
-#         chunksize=2000           # Write in chunks for large datasets
-#     )
-#     print("Data written successfully!")
     
-# except Exception as e:
-#     print(f"Error writing to database: {e}")
 
-# # Write dataframe to PostgreSQL
-# try:
-#     # Write to table
-#     df_ga.to_sql(
-#         'eugene_test_georgia_millage',      # Table name
-#         engine,                  # Database engine
-#         if_exists='replace',     # Options: 'fail', 'replace', 'append'
-#         index=False,             # Don't write dataframe index as column
-#         chunksize=2000           # Write in chunks for large datasets
-#     )
-#     print("Data written successfully!")
-    
-# except Exception as e:
-#     print(f"Error writing to database: {e}")
-
-# # Write dataframe to PostgreSQL  
-# try:
-#     # Write to table
-#     df_oh.to_sql(
-#         'eugene_test_ohio_millage',      # Table name
-#         engine,                  # Database engine
-#         if_exists='replace',     # Options: 'fail', 'replace', 'append'
-#         index=False,             # Don't write dataframe index as column
-#         chunksize=2000           # Write in chunks for large datasets
-#     )
-#     print("Data written successfully!")
-    
-# except Exception as e:
-#     print(f"Error writing to database: {e}")
-    
-    
+# List of CSV files to read    
 files_list = ["TX_MILLAGE_RATES.csv", "GA_MILLAGE_RATES.csv", "OH_MILLAGE_RATES.csv"]
 
-
+# Loop through each file, read it into a DataFrame, and write to PostgreSQL
 for file in files_list:
     file_path = os.path.join(csv_path, file)
     df = pd.read_csv(file_path)
